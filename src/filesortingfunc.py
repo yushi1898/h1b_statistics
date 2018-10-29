@@ -42,49 +42,28 @@ class catdata(object):
     
 
 #catogrize data and count the number of time it appears in datalist
+
 def categorize(datalist):
-    datalist_copy = datalist[:]             #copy datalist into a new list
     datalength = len(datalist)
-    catlist = []
-    while len(datalist_copy) !=0:
-        catname = datalist_copy[0]
-        catcount = 0
-
-        i=0
-        while i < len(datalist_copy): 
-            if datalist_copy[i] == catname:
-                catcount +=1
-                datalist_copy.remove(catname)
-            else:
-                i+=1 
-
-        catlist.append([catname, catcount,catcount/datalength])
-
-    return catlist
-
-
-def categorize_2(datalist):
-    datalist_copy = datalist[:]
-    datalength = len(datalist)
-    catlist=[]
-    catlist.append([datalist_copy[0],0,0])
-    catlist_tp = zip(*catlist)         # transpose of catlist , for selecting name column
-    for i in range(len(datalist_copy)):
-        catname = datalist_copy[i]
-        nameindex = findindex(catlist_tp[0],catname)
-        if nameindex!=-1:
+    catlist=[]                              #make list storing [catecory name , number of count and fraction of total, percentage] 
+    catlist.append([datalist[0],0,0])
+    catlist_tp = zip(*catlist)              # transpose of catlist , catlist_tp[0] is used for a dictionary for selecting name column
+    for i in range(len(datalist)):
+        catname = datalist[i]
+        nameindex = findindex(catlist_tp[0],catname)      #search if the category name already exist, if yes, return index number, else return -1
+        if nameindex!=-1:                                 #when category name already exsist, find the index count 
             catlist[nameindex][1]+=1
             catlist[nameindex][2]+=1.0/datalength
-        else:
-            catlist.append([catname,1,1.0/datalength])
-            catlist_tp = zip(*catlist)
-    
+        else:                                             #when cateogry is new, create it and count
+            catlist.append([catname,1,1.0/datalength])  
+            catlist_tp = zip(*catlist)                     #update column dictionary
+       
     return catlist
 
 
 
 #sorting function using merge algorithom
-def merge_sort(datalist):
+def merge_sort(datalist):                        #this function is used to divide datalist half-half till the number of unit in a list is twp 
     if len(datalist)<2:
         return(datalist)
         
@@ -95,7 +74,7 @@ def merge_sort(datalist):
         return merge(left,right)
 
 
-def merge(left, right):
+def merge(left, right):                          #this function is used to merge two sorted list in a sorted way
     result = []
     i=0
     j=0
@@ -122,7 +101,7 @@ def merge(left, right):
     return result
     
 
-
+# pick the first tpnm of datalist
 def picktop(datalist,tpnum):
     if len(datalist) > tpnum:
         datalist_top = datalist[:tpnum]
